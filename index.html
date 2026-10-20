@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T&amp;M Controls AVR06 - Service Guide</title>
+<style>
+  :root{
+    --bg:#0f1512; --card:#17201b; --line:#26342c; --text:#e6efe9; --muted:#9fb3a7;
+    --accent:#3ddc84; --amber:#ffb84d; --red:#ff5d5d; --lcd:#2b4fd8; --lcdtext:#dfe8ff;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{padding:28px 18px 18px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#14201a,#0f1512)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:44px;height:44px;border-radius:10px;background:var(--accent);color:#06120b;display:grid;place-items:center;font-weight:800;letter-spacing:-1px}
+  h1{font-size:1.45rem;margin:0}
+  .sub{color:var(--muted);margin:4px 0 0;font-size:.95rem}
+  nav{position:sticky;top:0;z-index:5;background:#0f1512ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;padding:8px 10px}
+  nav a{display:inline-block;color:var(--text);text-decoration:none;padding:6px 11px;margin-right:4px;border:1px solid var(--line);border-radius:999px;font-size:.88rem}
+  nav a:active{background:var(--line)}
+  main{max-width:820px;margin:0 auto;padding:10px 14px 60px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 6px;margin:16px 0}
+  h2{font-size:1.15rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+  h2 .n{background:var(--accent);color:#06120b;border-radius:6px;padding:0 7px;font-size:.85rem}
+  h3{font-size:1rem;margin:16px 0 6px}
+  p,li{color:var(--text)}
+  .muted{color:var(--muted)}
+  table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:.93rem}
+  th,td{text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}
+  code,.mono{font-family:ui-monospace,Consolas,monospace}
+  .warn{border-left:4px solid var(--amber);background:#2a2214;padding:10px 12px;border-radius:8px;margin:10px 0 14px}
+  .danger{border-left:4px solid var(--red);background:#2b1616;padding:10px 12px;border-radius:8px;margin:10px 0 14px}
+  .ok{border-left:4px solid var(--accent);background:#132a1d;padding:10px 12px;border-radius:8px;margin:10px 0 14px}
+  .lcd{display:inline-block;background:var(--lcd);color:var(--lcdtext);font-family:ui-monospace,Consolas,monospace;font-size:1.15rem;line-height:1.25;padding:8px 12px;border-radius:6px;border:3px solid #10204f;letter-spacing:.12em;white-space:pre;box-shadow:inset 0 0 12px #0006}
+  .lcdrow{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:10px 0 4px}
+  .blink{animation:b 1s steps(1) infinite}
+  @keyframes b{50%{opacity:0}}
+  .bits{display:flex;gap:4px;margin:6px 0 2px;flex-wrap:wrap}
+  .bit{width:34px;text-align:center;border:1px solid var(--line);border-radius:6px;padding:3px 0;font-family:ui-monospace,Consolas,monospace}
+  .bit small{display:block;color:var(--muted);font-size:.68rem}
+  .dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+  details{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600}
+  footer{text-align:center;color:var(--muted);font-size:.85rem;padding:20px}
+  @media print{
+    body{background:#fff;color:#000} nav{display:none}
+    section{border-color:#ccc;background:#fff} .lcd{color:#fff}
+    p,li,td{color:#000} .muted,th{color:#444}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">T&amp;M</div>
+    <div>
+      <h1>AVR06 Controller - Service Guide</h1>
+      <p class="sub">T&amp;M Controls replacement board for the WHERRY AVR06 RISC controller</p>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <a href="#safety">Safety</a>
+  <a href="#overview">Overview</a>
+  <a href="#power">Power</a>
+  <a href="#leds">LEDs</a>
+  <a href="#display">Service display</a>
+  <a href="#screens">Screens</a>
+  <a href="#heartbeat">Heartbeat</a>
+  <a href="#trouble">Troubleshooting</a>
+  <a href="#contact">Support</a>
+</nav>
+
+<main>
+
+<section id="safety">
+  <h2><span class="n">1</span> Safety first</h2>
+  <div class="danger">
+    <strong>Isolate the machine before touching the board.</strong> Switch off and lock out the control cabinet supply before connecting or disconnecting any terminal plug, the D-sub cable or the service display.
+  </div>
+  <ul>
+    <li>Work only with dry hands and on a de-energised board. Handle the board by its edges.</li>
+    <li>The resistors and voltage regulators near the power terminals run warm in normal operation. Do not touch them right after power-off.</li>
+    <li>Plug the terminal blocks back in exactly as they were. Take a photo before you unplug anything.</li>
+    <li>This guide is for qualified maintenance staff. Do not modify components on the board.</li>
+  </ul>
+</section>
+
+<section id="overview">
+  <h2><span class="n">2</span> Overview</h2>
+  <p>The AVR06 is a 24 V DC machine controller with opto-isolated inputs, transistor outputs, analogue outputs and a Modbus serial port. The T&amp;M Controls board is a drop-in replacement for the original WHERRY board: same size, same mounting holes, same terminal positions and the same original firmware.</p>
+  <table>
+    <tr><th>Item</th><th>Value</th></tr>
+    <tr><td>Supply</td><td>24 V DC</td></tr>
+    <tr><td>Typical consumption</td><td>approx. 0.1 - 0.15 A at 24 V (board only, no load)</td></tr>
+    <tr><td>Firmware</td><td>shown on the service display as <code>23_20.V1</code></td></tr>
+    <tr><td>Inputs</td><td>opto-isolated, 24 V, with indicator LEDs</td></tr>
+    <tr><td>Outputs</td><td>Q1 - Q16, switch to 0 V (open collector)</td></tr>
+    <tr><td>Communication</td><td>Modbus RTU via the female D-sub marked SERIAL</td></tr>
+    <tr><td>Mounting</td><td>DIN rail enclosure (T&amp;M Premium version)</td></tr>
+  </table>
+</section>
+
+<section id="power">
+  <h2><span class="n">3</span> Power supply</h2>
+  <p>The board is powered from <strong>24 V DC</strong> on the bottom terminal blocks. All terminals marked <strong>24V</strong> are connected together on the board, and so are all terminals marked <strong>GND</strong>. One 24 V wire and one GND wire are enough to power the whole board.</p>
+  <table>
+    <tr><th>Terminal block</th><th>24V</th><th>GND</th></tr>
+    <tr><td>J10</td><td>pins 3 - 6</td><td>pins 1 - 2</td></tr>
+    <tr><td>J11</td><td>pins 1 - 2</td><td>pins 3 - 6</td></tr>
+  </table>
+  <div class="warn"><strong>Check polarity.</strong> The board has no reverse-polarity protection. Always compare with the 24V / GND print next to the terminals before switching on.</div>
+  <h3>Bench test</h3>
+  <ol>
+    <li>Set a lab supply to 24.0 V with a current limit of 0.30 A.</li>
+    <li>Connect 24V and GND on J11.</li>
+    <li>The red <strong>POWER VCC +5V</strong> LED lights. The supply should stay in constant-voltage mode (no current limiting).</li>
+  </ol>
+</section>
+
+<section id="leds">
+  <h2><span class="n">4</span> LED indicators</h2>
+  <table>
+    <tr><th>LED</th><th>Meaning</th></tr>
+    <tr><td><span class="dot" style="background:var(--red)"></span>POWER VCC +5V</td><td>Internal 5 V supply is present. Must be on whenever the board is powered.</td></tr>
+    <tr><td><span class="dot" style="background:#7be07b"></span><span class="dot" style="background:#ffd34d"></span>Input LEDs (green / yellow)</td><td>Show the state of the opto-isolated inputs. A lit LED means 24 V is present on that input.</td></tr>
+  </table>
+</section>
+
+<section id="display">
+  <h2><span class="n">5</span> Service display</h2>
+  <p>The board has a 16-pin socket <strong>DIS2</strong> for a 2-line character display. On T&amp;M Premium boards the display is fitted as standard. On boards without a display, a service display can be plugged in while the board is switched off.</p>
+  <ul>
+    <li>Press the <strong>SELECT</strong> button next to the display to step through the screens.</li>
+    <li>If the text is not visible or only dark blocks appear, adjust contrast with the small blue trimmer <strong>RV1</strong> using a small screwdriver.</li>
+    <li>The display is for information only. Nothing can be changed or damaged by browsing the screens.</li>
+  </ul>
+</section>
+
+<section id="screens">
+  <h2><span class="n">6</span> Display screens</h2>
+
+  <h3>After switching on</h3>
+  <div class="lcdrow">
+    <div class="lcd">Prg Ver
+23_20.V1</div>
+    <div class="muted">Firmware version. Quote this when you contact support.</div>
+  </div>
+  <div class="lcdrow">
+    <div class="lcd">SELF CHK
+00000001</div>
+    <div class="muted">Result of the start-up self check. <code>00000001</code> is the value shown by a healthy board.</div>
+  </div>
+
+  <h3>Inputs - LS166_1, LS166_2, LS166_3</h3>
+  <div class="lcdrow">
+    <div class="lcd">LS166_1
+11111111</div>
+    <div class="muted">Live state of the inputs, 8 per screen, 3 screens.</div>
+  </div>
+  <div class="ok">
+    <strong>Inputs read inverted:</strong><br>
+    <span class="mono">1</span> = input <strong>off</strong> (no 24 V)<br>
+    <span class="mono">0</span> = input <strong>on</strong> (24 V present)<br>
+    With nothing connected, all three screens show <span class="mono">11111111</span>. This is normal.
+  </div>
+
+  <h3>Outputs - CD4094_1, CD4094_2</h3>
+  <div class="lcdrow">
+    <div class="lcd">CD4094_2
+0000<span class="blink">1</span>000</div>
+    <div class="muted">Live state of the outputs, 8 per screen.</div>
+  </div>
+  <p><span class="mono">1</span> = output <strong>on</strong> (switched to 0 V), <span class="mono">0</span> = output <strong>off</strong>.</p>
+  <p class="muted">Screen <code>CD4094_2</code> shows terminal block J7, outputs Q1 to Q8, read from the left:</p>
+  <div class="bits">
+    <div class="bit">0<small>Q1</small></div><div class="bit">0<small>Q2</small></div><div class="bit">0<small>Q3</small></div><div class="bit">0<small>Q4</small></div>
+    <div class="bit"><span class="blink">1</span><small>Q5</small></div><div class="bit">0<small>Q6</small></div><div class="bit">0<small>Q7</small></div><div class="bit">0<small>Q8</small></div>
+  </div>
+</section>
+
+<section id="heartbeat">
+  <h2><span class="n">7</span> Heartbeat output Q5</h2>
+  <p>While the controller is running, output <strong>Q5 on J7</strong> switches on and off continuously. On the <code>CD4094_2</code> screen this is the blinking fifth digit.</p>
+  <div class="ok"><strong>Q5 blinking</strong> = the controller is alive and the program is running.</div>
+  <div class="warn"><strong>Q5 not blinking</strong> = the program has stopped. Power-cycle the machine. If it does not recover, contact support.</div>
+</section>
+
+<section id="trouble">
+  <h2><span class="n">8</span> Troubleshooting</h2>
+
+  <details>
+    <summary>POWER LED is off</summary>
+    <ul>
+      <li>Measure the voltage between a 24V and a GND terminal: it should be 22 - 28 V DC.</li>
+      <li>Check that the terminal plugs are fully seated and the screws are tight.</li>
+      <li>If 24 V is present on the terminals and the LED stays off, the board needs repair.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Display is blank or shows only dark blocks</summary>
+    <ul>
+      <li>Turn the contrast trimmer RV1 slowly through its whole range.</li>
+      <li>Check that the display is seated straight in the DIS2 socket (switch off first).</li>
+      <li>Dark blocks on the top line that never change mean the program did not start: see "Heartbeat".</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>An input does not react</summary>
+    <ul>
+      <li>Activate the sensor or switch and watch the matching input LED.</li>
+      <li>LED off: check the field wiring and the 24 V supply of the sensor.</li>
+      <li>LED on, but the bit on the LS166 screen stays <span class="mono">1</span>: the board needs repair.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>An output does not switch</summary>
+    <ul>
+      <li>Check on the CD4094 screen whether the program is switching the output on (<span class="mono">1</span>).</li>
+      <li>Bit is <span class="mono">1</span> but the device does not work: check the device, its fuse and wiring. The output switches to 0 V, so the device must be fed from +24 V.</li>
+      <li>Bit stays <span class="mono">0</span>: the machine sequence is not requesting this output. Check the machine first.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>No Modbus communication</summary>
+    <ul>
+      <li>Check that the D-sub cable is plugged into the connector marked <strong>SERIAL</strong> and both screws are tight.</li>
+      <li>Check that the Modbus address setting on the board matches the original board.</li>
+    </ul>
+  </details>
+</section>
+
+<section id="contact">
+  <h2><span class="n">9</span> Support</h2>
+  <p>Before contacting support, please note:</p>
+  <ul>
+    <li>the <strong>board number</strong> (for example <code>E571623</code>) printed on the label of the enclosure,</li>
+    <li>the firmware version from the first display screen (<code>23_20.V1</code>),</li>
+    <li>what the display and the LEDs show, a photo helps a lot.</li>
+  </ul>
+  <table>
+    <tr><td>Company</td><td>T&amp;M Controls</td></tr>
+    <tr><td>E-mail</td><td><a href="mailto:tmcontrols.service@gmail.com" style="color:var(--accent)">tmcontrols.service@gmail.com</a></td></tr>
+  </table>
+  <h3>Numbered seal</h3>
+  <p>Every board is shipped in a box closed with a numbered holographic seal. The number on the seal is the <strong>board number</strong> and is repeated on the label of the enclosure.</p>
+  <div class="ok">The seal confirms that the box has not been opened since it left T&amp;M Controls. Opening the box to install the board is expected and does not affect your support. If the seal is <strong>already broken on delivery</strong>, please contact us before installing the board.</div>
+</section>
+
+</main>
+
+<footer>T&amp;M Controls - AVR06 replacement controller - Service guide rev. 1.0 (October 2026)</footer>
+</body>
+</html>
