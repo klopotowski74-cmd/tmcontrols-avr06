@@ -85,6 +85,8 @@
     <li>Plug the terminal blocks back in exactly as they were. Take a photo before you unplug anything.</li>
     <li>This guide is for qualified maintenance staff. Do not modify components on the board.</li>
   </ul>
+  <h3>Before installing a replacement board</h3>
+  <div class="warn"><strong>Set JP1 and JP2 exactly as on the old board.</strong> JP1 (marked <code>2^0 -&gt;</code>) and JP2 (marked <code>2^1 -&gt;</code>) are the two small slide switches next to the ISP header. They set the Modbus address of the board. Machines on the same line can use different settings, so always copy the positions from the board you are replacing. Take a photo of the old board first.</div>
 </section>
 
 <section id="overview">
@@ -230,7 +232,7 @@
     <summary>No Modbus communication</summary>
     <ul>
       <li>Check that the D-sub cable is plugged into the <strong>male</strong> 9-pin D-sub (SERIAL / X7 on the original board), not into the female one, and both screws are tight.</li>
-      <li>Check that the Modbus address setting on the board matches the original board.</li>
+      <li>Check that the slide switches <strong>JP1</strong> (<code>2^0 -&gt;</code>) and <strong>JP2</strong> (<code>2^1 -&gt;</code>) are in the same positions as on the original board from this machine.</li>
     </ul>
   </details>
 </section>
@@ -260,6 +262,6 @@
 
 </main>
 
-<footer>T&amp;M Controls - AVR06 replacement controller - Service guide rev. 1.3 (October 2026)</footer>
+<footer>T&amp;M Controls - AVR06 replacement controller - Service guide rev. 1.4 (October 2026)</footer>
 </body>
 </html>
