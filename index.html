@@ -97,7 +97,7 @@
     <tr><td>Firmware</td><td>shown on the service display as <code>23_20.V1</code></td></tr>
     <tr><td>Inputs</td><td>opto-isolated, 24 V, with indicator LEDs</td></tr>
     <tr><td>Outputs</td><td>Q1 - Q16, switch to 0 V (open collector)</td></tr>
-    <tr><td>Communication</td><td>Modbus RTU via the female D-sub marked SERIAL</td></tr>
+    <tr><td>Communication</td><td>Modbus RTU via the <strong>male</strong> 9-pin D-sub (pins), marked SERIAL / X7 on the original board. The female 9-pin D-sub (marked Serial No. / X6 on the original) is a factory programming port: leave it unconnected.</td></tr>
     <tr><td>Mounting</td><td>DIN rail enclosure (T&amp;M Premium version)</td></tr>
   </table>
 </section>
@@ -229,7 +229,7 @@
   <details>
     <summary>No Modbus communication</summary>
     <ul>
-      <li>Check that the D-sub cable is plugged into the connector marked <strong>SERIAL</strong> and both screws are tight.</li>
+      <li>Check that the D-sub cable is plugged into the <strong>male</strong> 9-pin D-sub (SERIAL / X7 on the original board), not into the female one, and both screws are tight.</li>
       <li>Check that the Modbus address setting on the board matches the original board.</li>
     </ul>
   </details>
@@ -260,6 +260,6 @@
 
 </main>
 
-<footer>T&amp;M Controls - AVR06 replacement controller - Service guide rev. 1.2 (October 2026)</footer>
+<footer>T&amp;M Controls - AVR06 replacement controller - Service guide rev. 1.3 (October 2026)</footer>
 </body>
 </html>
